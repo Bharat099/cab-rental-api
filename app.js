@@ -22,26 +22,46 @@ app.get('/cab',(req,res)=>{
 
 //check all cars
 app.get('/cab', async (req,res)=>{
+try{
 	const car=await car.find();
 	res.json(car);
+}
+	catch(err){
+		res.json(err)
+	}
 });
 
-//check cars availability
-app.get('/cab/availability', async (req,res)=>{
+//check cars available
+app.get('/cab/available', async (req,res)=>{
+	try{
 	const car=await car.find({booked:false});
 	res.json(car);
+	}
+	catch(err){
+		res.json(err)
+	}
 });
 
 //check booked cars
 app.get('/cab/book', async (req,res)=>{
+	try{
 	const car=await car.find({book:true});
 	res.json(car);
+}
+catch(err){
+	res.json(err)
+}
 });
 
 //check cars by vehicle number
 app.get('/cab/carnumber/:id',async (req,res)=>{
+try{
 	const car=await car.find({car_number:req.params.id});
 	res.json(car);
+}
+	catch(err){
+		res.json(err)
+	}
 });
 
 
@@ -91,7 +111,7 @@ app.patch('/cab/carnumber/:id',async (req,res)=>{
 });
 
 //book a car using vehice number
-app.patch('/cab/availability/book/carnumber/:id',async (req,res)=>{
+app.patch('/cab/available/book/carnumber/:id',async (req,res)=>{
 	const bookedcar=await car.updateOne(
 		{car_number:req.params.id},
 		{$set:{booked:true,
